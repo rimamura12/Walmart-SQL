@@ -164,14 +164,15 @@ from walmartsalesdata2;
 select distinct branch, city
 from walmartsalesdata2;
 
--- How many unique product lines does the data have? --
+-- How many unique product lines and the most selling product line? --
+
 select distinct `product line`
 from walmartsalesdata2;
 
 select `product line`, count(*)
 from walmartsalesdata2
 group by `product line`
-order by `product line` desc;
+order by `product line` asc;
 
 -- most common type of payment--
 
@@ -179,3 +180,62 @@ select payment, count(*)
 from walmartsalesdata2
 group by payment;
 
+-- money related findings -- 
+
+select month_name as month,
+round(sum(total),2) as total_revenue
+from walmartsalesdata2
+group by month_name
+order by month_name asc;
+
+select month_name as month,
+round(sum(cogs),2) as cogs
+from walmartsalesdata2
+group by month_name
+order by cogs desc;
+
+select `product line`,
+round(sum(total),2) as total_revenue_of_product_line
+from walmartsalesdata2
+group by `product line`
+order by `total_revenue_of_product_line` desc;
+
+select city,
+round(sum(total),2) as total_revenue_city
+from walmartsalesdata2
+group by `city`
+order by `total_revenue_city` desc;
+
+select city, branch,
+round(sum(total),2) as total_revenue_city
+from walmartsalesdata2
+group by city, branch
+order by `total_revenue_city` desc;
+
+select `product line`,
+round(avg(`tax 5%`),2) as avg_vat
+from walmartsalesdata2
+group by `product line`
+order by avg_vat desc;
+
+-- which branch sold more products that average product sold
+
+select branch, 
+sum(quantity)
+from walmartsalesdata2
+group by branch
+having sum(quantity) > (select avg(quantity) from walmartsalesdata2);
+
+-- what is the most common product line by gender -- 
+
+select gender, `product line`, count(gender) as total_count
+from walmartsalesdata2
+group by gender, `product line`
+order by total_count desc;
+
+
+
+
+
+select*
+from walmartsalesdata2;
